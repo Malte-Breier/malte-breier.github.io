@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malte's Retro Menu</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: Impact, Charcoal, sans-serif;
+      color: white;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding-left: 5vw;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: flex-start;
+      transition: transform 0.2s ease-out;
+    }
+
+    .item {
+      width: 80vw;
+      max-width: 700px;
+      padding: 20px 30px;
+      background: linear-gradient(90deg, rgba(255,0,0,0.15), rgba(255,0,0,0.25));
+      border: 2px solid rgba(255,0,0,0.2);
+      border-radius: 12px;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(255, 0, 0, 0.2);
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .item.selected {
+      background: linear-gradient(90deg, rgba(255,0,0,0.35), rgba(255,0,0,0.55));
+      transform: scale(1.05);
+      border-color: rgba(255,0,0,0.6);
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="list" id="menuList">
+      <div class="item selected" data-url="https://malte-breier.github.io/Cinder/">Cinder</div>
+      <div class="item" data-url="https://malte-breier.github.io/kanarush/">Kana Rush</div>
+      <div class="item" data-url="https://malte-breier.github.io/calc/">Calc</div>
+    </div>
+  </div>
+
+  <script>
+    const items = document.querySelectorAll('.item');
+    const list = document.getElementById('menuList');
+    let current = 0;
+
+    const updateSelection = index => {
+      items.forEach(item => item.classList.remove('selected'));
+      items[index].classList.add('selected');
+      const offset = -index * (items[0].offsetHeight + 30);
+      list.style.transform = `translateY(${offset}px)`;
+    };
+
+    const goToLink = index => {
+      const url = items[index].getAttribute('data-url');
+      if (url) window.location.href = url;
+    };
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') {
+        current = (current + 1) % items.length;
+        updateSelection(current);
+      } else if (e.key === 'ArrowUp') {
+        current = (current - 1 + items.length) % items.length;
+        updateSelection(current);
+      } else if (e.key === 'Enter') {
+        goToLink(current);
+      }
+    });
+
+    // Mouse wheel scrolling
+    document.addEventListener('wheel', e => {
+      if (e.deltaY > 0) {
+        current = (current + 1) % items.length;
+      } else {
+        current = (current - 1 + items.length) % items.length;
+      }
+      updateSelection(current);
+    });
+
+    // Mouse drag scrolling
+    let isDragging = false;
+    let startY = 0;
+    let dragThreshold = 20;
+
+    const onMove = (y) => {
+      const deltaY = y - startY;
+      if (Math.abs(deltaY) > dragThreshold) {
+        if (deltaY > 0) {
+          current = (current - 1 + items.length) % items.length;
+        } else {
+          current = (current + 1) % items.length;
+        }
+        updateSelection(current);
+        startY = y;
+      }
+    };
+
+    document.addEventListener('mousedown', e => {
+      isDragging = true;
+      startY = e.clientY;
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (isDragging) onMove(e.clientY);
+    });
+
+    document.addEventListener('mouseup', () => isDragging = false);
+
+    document.addEventListener('touchstart', e => {
+      isDragging = true;
+      startY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchmove', e => {
+      if (isDragging) onMove(e.touches[0].clientY);
+    });
+
+    document.addEventListener('touchend', () => isDragging = false);
+
+    items.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        current = index;
+        updateSelection(current);
+        goToLink(current);
+      });
+    });
+  </script>
+</body>
+</html>
