@@ -31,16 +31,74 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* LANG TOGGLE */
+/* =====================================================
+   LANGUAGE SYSTEM
+   All [data-de] and [data-en] elements are hidden by
+   default. Only the active language's elements show.
+   JS adds class "lang-de" or "lang-en" to <html>.
+   ===================================================== */
+.t-de, .t-en { display: none !important; }
+html.lang-de .t-de { display: revert !important; }
+html.lang-en .t-en { display: revert !important; }
+/* Block-level overrides */
+html.lang-de .t-de.b  { display: block !important; }
+html.lang-en .t-en.b  { display: block !important; }
+/* Flex overrides */
+html.lang-de .t-de.f  { display: flex !important; }
+html.lang-en .t-en.f  { display: flex !important; }
+/* Inline overrides */
+html.lang-de .t-de.i  { display: inline !important; }
+html.lang-en .t-en.i  { display: inline !important; }
+/* List-item */
+html.lang-de .t-de.li { display: list-item !important; }
+html.lang-en .t-en.li { display: list-item !important; }
+
+/* =====================================================
+   NAV  — lang toggle lives here, no overlap possible
+   ===================================================== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(12,11,9,0.88); backdrop-filter: blur(20px);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
+  letter-spacing: -0.02em; color: var(--white); text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-logo span { color: var(--gold); }
+
+/* Right side of nav: links + lang toggle grouped */
+.nav-right {
+  display: flex; align-items: center; gap: 2rem;
+}
+.nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.78rem; letter-spacing: 0.07em; text-transform: uppercase;
+  transition: color 0.2s; white-space: nowrap;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--gold) !important; color: var(--black) !important;
+  padding: 0.46rem 1.25rem !important; border-radius: 2px; font-weight: 500 !important;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--gold-light) !important; }
+
+/* Lang toggle — inline in nav, no fixed positioning */
 .lang-toggle {
-  position: fixed; top: 1.25rem; right: 3rem; z-index: 200;
   display: flex; gap: 2px;
-  background: rgba(12,11,9,0.7); backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.04);
   border: 1px solid var(--border); border-radius: 3px; padding: 3px;
+  flex-shrink: 0;
 }
 .lang-btn {
-  padding: 0.28rem 0.75rem;
-  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
+  padding: 0.26rem 0.7rem;
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase;
   border: none; background: transparent; color: var(--muted);
   cursor: pointer; border-radius: 2px; transition: all 0.2s;
   font-family: 'DM Sans', sans-serif;
@@ -48,38 +106,16 @@ body::after {
 .lang-btn.active { background: var(--gold); color: var(--black); }
 .lang-btn:hover:not(.active) { color: var(--white); }
 
-/* Translation visibility */
-[data-de], [data-en] { display: none; }
-html[lang="de"] [data-de] { display: revert; }
-html[lang="en"] [data-en] { display: revert; }
+/* On mobile: hide nav-links, keep lang toggle */
+@media (max-width: 860px) {
+  nav { padding: 1rem 1.4rem; }
+  .nav-links { display: none; }
+  .nav-right { gap: 0; }
+}
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.3rem 3rem;
-  border-bottom: 1px solid var(--border);
-  background: rgba(12,11,9,0.85); backdrop-filter: blur(20px);
-}
-.nav-logo {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
-  letter-spacing: -0.02em; color: var(--white); text-decoration: none;
-}
-.nav-logo span { color: var(--gold); }
-.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
-.nav-links a {
-  color: var(--muted); text-decoration: none;
-  font-size: 0.78rem; letter-spacing: 0.07em; text-transform: uppercase;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--white); }
-.nav-cta {
-  background: var(--gold) !important; color: var(--black) !important;
-  padding: 0.48rem 1.3rem !important; border-radius: 2px; font-weight: 500 !important;
-}
-.nav-cta:hover { background: var(--gold-light) !important; }
-
-/* HERO */
+/* =====================================================
+   HERO
+   ===================================================== */
 .hero {
   min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
   padding: 9rem 3rem 5rem; position: relative; overflow: hidden;
@@ -104,6 +140,7 @@ nav {
 }
 .badge-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
 .hero h1 {
   font-family: 'Syne', sans-serif; font-weight: 800;
   font-size: clamp(3rem, 7.5vw, 7rem);
@@ -111,6 +148,7 @@ nav {
   opacity: 0; animation: riseIn 0.9s 0.35s forwards;
 }
 .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+
 .hero-lead {
   margin-top: 1.8rem; max-width: 48ch;
   font-size: 1rem; line-height: 1.75; color: rgba(244,241,235,0.58);
@@ -125,7 +163,7 @@ nav {
   padding: 0.95rem 2.2rem; font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem; font-weight: 500; letter-spacing: 0.03em;
   border-radius: 2px; cursor: pointer; transition: background 0.2s, transform 0.2s;
-  text-decoration: none; display: inline-block;
+  text-decoration: none; display: inline-block; white-space: nowrap;
 }
 .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
 .btn-line {
@@ -135,6 +173,7 @@ nav {
 .btn-line:hover { color: var(--white); }
 .btn-line svg { transition: transform 0.2s; }
 .btn-line:hover svg { transform: translateX(4px); }
+
 .hero-proof {
   margin-top: 4.5rem; padding-top: 2.2rem; border-top: 1px solid var(--border);
   display: flex; gap: 3rem; flex-wrap: wrap;
@@ -146,9 +185,11 @@ nav {
 }
 .proof-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.28rem; }
 
-/* DEMO NOTICE */
+/* =====================================================
+   DEMO NOTICE
+   ===================================================== */
 .demo-notice {
-  margin: 0 3rem 0;
+  margin: 0 3rem;
   border: 1px solid rgba(201,153,58,0.28);
   border-radius: 4px; background: rgba(201,153,58,0.045);
   padding: 1.4rem 2rem;
@@ -162,7 +203,9 @@ nav {
 .demo-txt a { color: var(--gold); text-decoration: none; }
 .demo-txt a:hover { text-decoration: underline; }
 
-/* MARQUEE */
+/* =====================================================
+   MARQUEE
+   ===================================================== */
 .marquee-wrap {
   overflow: hidden; margin-top: 4rem;
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
@@ -177,8 +220,12 @@ nav {
   white-space: nowrap; display: inline-flex; align-items: center; gap: 1rem;
 }
 .m-item::after { content: '✦'; color: var(--gold); font-size: 0.52rem; }
+/* marquee items are always visible (language-neutral text here) */
+.marquee-track .m-item { display: inline-flex !important; }
 
-/* SECTION LAYOUT */
+/* =====================================================
+   GENERIC SECTION STYLES
+   ===================================================== */
 .section { padding: 7rem 3rem; }
 .sec-eyebrow {
   display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem;
@@ -191,7 +238,9 @@ nav {
 }
 .sec-title em { color: var(--gold); font-style: italic; font-weight: 400; }
 
-/* FEATURES GRID */
+/* =====================================================
+   FEATURES GRID
+   ===================================================== */
 .features-grid {
   display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
   margin-top: 3.5rem; border: 1px solid var(--border); background: var(--border);
@@ -208,12 +257,12 @@ nav {
 .feat-card:hover { background: var(--card-bg); }
 .feat-card:hover::after { transform: scaleX(1); }
 .feat-ico { font-size: 1.55rem; margin-bottom: 1.1rem; }
-.feat-name {
-  font-family: 'Syne', sans-serif; font-size: 0.97rem; font-weight: 700; margin-bottom: 0.55rem;
-}
+.feat-name { font-family: 'Syne', sans-serif; font-size: 0.97rem; font-weight: 700; margin-bottom: 0.55rem; }
 .feat-desc { font-size: 0.83rem; color: rgba(244,241,235,0.5); line-height: 1.72; }
 
-/* PRICING */
+/* =====================================================
+   PRICING
+   ===================================================== */
 .pricing-wrap { margin-top: 4rem; max-width: 680px; }
 .pricing-card {
   border: 1px solid var(--gold); border-radius: 6px; padding: 3rem;
@@ -244,6 +293,7 @@ nav {
 }
 .feat-list li:last-child { border-bottom: none; }
 .feat-list li::before { content:'✓'; color:var(--gold); font-size:0.75rem; flex-shrink:0; margin-top:0.18rem; }
+
 .addons-title {
   font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
@@ -270,7 +320,9 @@ nav {
 }
 .addon-freq { display: block; font-size: 0.68rem; font-weight: 400; color: var(--muted); }
 
-/* PROCESS */
+/* =====================================================
+   PROCESS
+   ===================================================== */
 .process-section { padding: 7rem 3rem; background: rgba(255,255,255,0.012); }
 .process-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; margin-top: 4rem; }
 .p-step { position: relative; }
@@ -286,7 +338,9 @@ nav {
 .p-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.52rem; }
 .p-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
 
-/* BOOKING */
+/* =====================================================
+   BOOKING
+   ===================================================== */
 .booking-section { padding: 7rem 3rem; }
 .booking-inner { display: grid; grid-template-columns: 1fr 1.45fr; gap: 5rem; align-items: start; }
 .booking-info { position: sticky; top: 8rem; }
@@ -307,12 +361,12 @@ nav {
 .ct-ico { font-size: 1.1rem; flex-shrink: 0; }
 .ct-name { font-size: 0.86rem; font-weight: 500; margin-bottom: 0.2rem; }
 .ct-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.55; }
+
 .cal-card {
-  border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
-  background: var(--card-bg); backdrop-filter: blur(10px);
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
 }
 .cal-header {
-  background: rgba(201,153,58,0.05); border-bottom: 1px solid var(--border);
+  background: rgba(201,153,58,0.06); border-bottom: 2px solid var(--gold);
   padding: 1rem 1.4rem; display: flex; align-items: center; justify-content: space-between;
 }
 .cal-hd-title { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; }
@@ -321,30 +375,21 @@ nav {
   background: rgba(201,153,58,0.1); border: 1px solid rgba(201,153,58,0.25);
   color: var(--gold); padding: 0.2rem 0.68rem; border-radius: 20px;
 }
-.cal-body {
-  height: 540px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 1.35rem;
-  text-align: center; padding: 2rem;
-  background: repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(255,255,255,0.007) 18px, rgba(255,255,255,0.007) 19px);
+.cal-iframe-wrap {
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+  padding: 0;
 }
-.cal-ico-box {
-  width: 66px; height: 66px; border-radius: 10px;
-  border: 1px dashed rgba(201,153,58,0.38);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.9rem; color: rgba(201,153,58,0.5);
+.cal-iframe-wrap iframe {
+  display: block;
+  width: 100%;
+  border: none;
 }
-.cal-body h4 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.15rem; }
-.cal-body p { font-size: 0.81rem; color: var(--muted); max-width: 30ch; line-height: 1.6; }
-.cal-code {
-  font-family: 'Courier New', monospace; font-size: 0.71rem;
-  background: rgba(201,153,58,0.05); border: 1px solid var(--border);
-  color: var(--gold); padding: 0.85rem 1.2rem; border-radius: 3px;
-  line-height: 1.95; text-align: left; width: 100%; max-width: 380px;
-}
-.cal-hint { font-size: 0.75rem; color: var(--muted); max-width: 34ch; line-height: 1.6; }
-.cal-hint strong { color: var(--white); }
 
-/* FAQ */
+/* =====================================================
+   FAQ
+   ===================================================== */
 .faq-section { padding: 7rem 3rem; background: rgba(255,255,255,0.01); }
 .faq-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
@@ -358,7 +403,9 @@ nav {
 }
 .faq-a { font-size: 0.84rem; color: var(--muted); line-height: 1.7; }
 
-/* CTA */
+/* =====================================================
+   CTA
+   ===================================================== */
 .cta-section { padding: 9rem 3rem; text-align: center; position: relative; overflow: hidden; }
 .cta-section::before {
   content:''; position:absolute; inset:0;
@@ -374,7 +421,9 @@ nav {
 .cta-section > p { font-size: 0.95rem; color: var(--muted); margin-bottom: 2.5rem; position: relative; }
 .cta-actions { display: flex; justify-content: center; align-items: center; gap: 1.5rem; flex-wrap: wrap; position: relative; }
 
-/* FOOTER */
+/* =====================================================
+   FOOTER
+   ===================================================== */
 footer {
   padding: 2.5rem 3rem; border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
@@ -386,18 +435,19 @@ footer {
 .footer-links a { font-size: 0.77rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
 .footer-links a:hover { color: var(--white); }
 
-/* REVEAL */
+/* =====================================================
+   REVEAL ANIMATION
+   ===================================================== */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 
 @keyframes riseIn { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
 @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
 
-/* RESPONSIVE */
-@media (max-width: 960px) {
-  nav { padding: 1.2rem 1.5rem; }
-  .nav-links { display: none; }
-  .lang-toggle { right: 1.5rem; }
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 860px) {
   .hero, .section, .process-section, .booking-section, .faq-section, .cta-section { padding-left: 1.4rem; padding-right: 1.4rem; }
   .demo-notice { margin: 0 1.4rem; }
   .features-grid, .faq-grid { grid-template-columns: 1fr; }
@@ -407,65 +457,63 @@ footer {
   .booking-info { position: static; }
   .hero-proof { gap: 1.5rem; }
   footer { flex-direction: column; align-items: flex-start; }
+  .hero { padding: 8rem 1.4rem 4rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- LANG TOGGLE -->
-<div class="lang-toggle">
-  <button class="lang-btn active" onclick="setLang('de')" id="btn-de">DE</button>
-  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-</div>
-
-<!-- NAV -->
+<!-- ===================== NAV ===================== -->
 <nav>
   <a href="#" class="nav-logo">Moha <span>Webstarz</span></a>
-  <ul class="nav-links">
-    <li>
-      <a href="#leistungen" data-de>Leistungen</a>
-      <a href="#leistungen" data-en>Services</a>
-    </li>
-    <li>
-      <a href="#ablauf" data-de>Ablauf</a>
-      <a href="#ablauf" data-en>Process</a>
-    </li>
-    <li>
-      <a href="#preise" data-de>Preise</a>
-      <a href="#preise" data-en>Pricing</a>
-    </li>
-    <li>
-      <a href="#termin" class="nav-cta" data-de>Termin buchen</a>
-      <a href="#termin" class="nav-cta" data-en>Book a Call</a>
-    </li>
-  </ul>
+
+  <div class="nav-right">
+    <ul class="nav-links">
+      <!-- DE links -->
+      <li class="t-de"><a href="#leistungen">Leistungen</a></li>
+      <li class="t-de"><a href="#ablauf">Ablauf</a></li>
+      <li class="t-de"><a href="#preise">Preise</a></li>
+      <li class="t-de"><a href="#termin" class="nav-cta">Termin buchen</a></li>
+      <!-- EN links -->
+      <li class="t-en"><a href="#leistungen">Services</a></li>
+      <li class="t-en"><a href="#ablauf">Process</a></li>
+      <li class="t-en"><a href="#preise">Pricing</a></li>
+      <li class="t-en"><a href="#termin" class="nav-cta">Book a Call</a></li>
+    </ul>
+
+    <!-- Lang toggle — part of nav flow, never overlaps -->
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-de" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
 </nav>
 
-<!-- HERO -->
+<!-- ===================== HERO ===================== -->
 <section class="hero">
   <div class="hero-orb1"></div>
   <div class="hero-orb2"></div>
 
   <div class="hero-badge">
     <div class="badge-dot"></div>
-    <span data-de>Webdesign für lokale Unternehmen</span>
-    <span data-en>Web Design for Local Businesses</span>
+    <span class="t-de i">Webdesign für lokale Unternehmen</span>
+    <span class="t-en i">Web Design for Local Businesses</span>
   </div>
 
-  <h1 data-de>Ihre erste <em>professionelle</em> Website — fertig in Tagen</h1>
-  <h1 data-en>Your first <em>professional</em> website — ready in days</h1>
+  <h1 class="t-de b">Ihre erste <em>professionelle</em> Website — fertig in Tagen</h1>
+  <h1 class="t-en b">Your first <em>professional</em> website — ready in days</h1>
 
-  <p class="hero-lead" data-de>Wir bauen maßgeschneiderte Websites für lokale Unternehmen, die noch nicht online sind. Modern. Schnell. Auf Sie zugeschnitten — zu einem fairen Festpreis ohne versteckte Kosten.</p>
-  <p class="hero-lead" data-en>We build custom websites for local businesses that aren't online yet. Modern. Fast. Tailored to you — at a fair flat price with no hidden fees.</p>
+  <p class="hero-lead t-de b">Wir bauen maßgeschneiderte Websites für lokale Unternehmen, die noch nicht online sind. Modern. Schnell. Auf Sie zugeschnitten — zu einem fairen Festpreis ohne versteckte Kosten.</p>
+  <p class="hero-lead t-en b">We build custom websites for local businesses that aren't online yet. Modern. Fast. Tailored to you — at a fair flat price with no hidden fees.</p>
 
   <div class="hero-actions">
-    <a href="#termin" class="btn-gold" data-de>Kostenloses Gespräch buchen</a>
-    <a href="#termin" class="btn-gold" data-en>Book a Free Call</a>
-    <a href="#preise" class="btn-line" data-de>
+    <a href="#termin" class="btn-gold t-de">Kostenloses Gespräch buchen</a>
+    <a href="#termin" class="btn-gold t-en">Book a Free Call</a>
+    <a href="#preise" class="btn-line t-de">
       Preise ansehen
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <a href="#preise" class="btn-line" data-en>
+    <a href="#preise" class="btn-line t-en">
       See pricing
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
@@ -473,405 +521,404 @@ footer {
 
   <div class="hero-proof">
     <div>
-      <div class="proof-num" data-de>bis zu 3×</div>
-      <div class="proof-num" data-en>up to 3×</div>
-      <div class="proof-label" data-de>mehr Kundenanfragen online</div>
-      <div class="proof-label" data-en>more customer enquiries online</div>
+      <div class="proof-num t-de b">bis zu 3×</div>
+      <div class="proof-num t-en b">up to 3×</div>
+      <div class="proof-label t-de b">mehr Kundenanfragen online</div>
+      <div class="proof-label t-en b">more customer enquiries online</div>
     </div>
     <div>
-      <div class="proof-num" data-de>bis zu 80%</div>
-      <div class="proof-num" data-en>up to 80%</div>
-      <div class="proof-label" data-de>höheres Vertrauen bei Neukunden</div>
-      <div class="proof-label" data-en>higher trust from new customers</div>
+      <div class="proof-num t-de b">bis zu 80%</div>
+      <div class="proof-num t-en b">up to 80%</div>
+      <div class="proof-label t-de b">höheres Vertrauen bei Neukunden</div>
+      <div class="proof-label t-en b">higher trust from new customers</div>
     </div>
     <div>
       <div class="proof-num">~7 Tage</div>
-      <div class="proof-label" data-de>Ø Lieferzeit</div>
-      <div class="proof-label" data-en>avg. delivery time</div>
+      <div class="proof-label t-de b">Ø Lieferzeit</div>
+      <div class="proof-label t-en b">avg. delivery time</div>
     </div>
     <div>
       <div class="proof-num">24h</div>
-      <div class="proof-label" data-de>Reaktionszeit</div>
-      <div class="proof-label" data-en>response time</div>
+      <div class="proof-label t-de b">Reaktionszeit</div>
+      <div class="proof-label t-en b">response time</div>
     </div>
   </div>
 </section>
 
-<!-- DEMO NOTICE -->
+<!-- ===================== DEMO NOTICE ===================== -->
 <div class="demo-notice reveal">
   <div class="demo-ico">👀</div>
   <div class="demo-txt">
-    <h4 data-de>Sie haben bereits Ihr Demo gesehen?</h4>
-    <h4 data-en>Already seen your demo?</h4>
-    <p data-de>Super — dann wissen Sie bereits, wie Ihre neue Website aussehen kann. Das Gespräch ist der nächste Schritt: Wir klären Fragen zu Zahlung, Funktionen, Domain und Zeitplan. <a href="#termin">Jetzt Termin auswählen →</a></p>
-    <p data-en>Great — you already know what your new site could look like. The call is the perfect next step: we'll go over payment, features, your domain, and timeline. <a href="#termin">Pick a time below →</a></p>
+    <h4 class="t-de b">Sie haben bereits Ihr Demo gesehen?</h4>
+    <h4 class="t-en b">Already seen your demo?</h4>
+    <p class="t-de b">Super — dann wissen Sie bereits, wie Ihre neue Website aussehen kann. Das Gespräch ist der nächste Schritt: Wir klären Fragen zu Zahlung, Funktionen, Domain und Zeitplan. <a href="#termin">Jetzt Termin auswählen →</a></p>
+    <p class="t-en b">Great — you already know what your new site could look like. The call is the perfect next step: we'll go over payment, features, your domain, and timeline. <a href="#termin">Pick a time below →</a></p>
   </div>
 </div>
 
-<!-- MARQUEE -->
+<!-- ===================== MARQUEE ===================== -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <span class="m-item" data-de>Responsive Design</span><span class="m-item" data-en>Responsive Design</span>
-    <span class="m-item" data-de>Domain inklusive</span><span class="m-item" data-en>Domain Included</span>
-    <span class="m-item" data-de>Schnelle Ladezeiten</span><span class="m-item" data-en>Fast Load Times</span>
-    <span class="m-item" data-de>SEO-Grundoptimierung</span><span class="m-item" data-en>SEO Basics</span>
-    <span class="m-item" data-de>Kontaktformular</span><span class="m-item" data-en>Contact Form</span>
-    <span class="m-item" data-de>Google Maps</span><span class="m-item" data-en>Google Maps</span>
-    <span class="m-item" data-de>Mobilfreundlich</span><span class="m-item" data-en>Mobile-First</span>
-    <span class="m-item" data-de>Kein Abo-Zwang</span><span class="m-item" data-en>No Lock-in</span>
-    <!-- duplicate for loop -->
-    <span class="m-item" data-de>Responsive Design</span><span class="m-item" data-en>Responsive Design</span>
-    <span class="m-item" data-de>Domain inklusive</span><span class="m-item" data-en>Domain Included</span>
-    <span class="m-item" data-de>Schnelle Ladezeiten</span><span class="m-item" data-en>Fast Load Times</span>
-    <span class="m-item" data-de>SEO-Grundoptimierung</span><span class="m-item" data-en>SEO Basics</span>
-    <span class="m-item" data-de>Kontaktformular</span><span class="m-item" data-en>Contact Form</span>
-    <span class="m-item" data-de>Google Maps</span><span class="m-item" data-en>Google Maps</span>
-    <span class="m-item" data-de>Mobilfreundlich</span><span class="m-item" data-en>Mobile-First</span>
-    <span class="m-item" data-de>Kein Abo-Zwang</span><span class="m-item" data-en>No Lock-in</span>
+    <span class="m-item">Responsive Design</span>
+    <span class="m-item">Domain Inklusive</span>
+    <span class="m-item">Schnelle Ladezeiten</span>
+    <span class="m-item">SEO-Grundoptimierung</span>
+    <span class="m-item">Kontaktformular</span>
+    <span class="m-item">Google Maps</span>
+    <span class="m-item">Mobilfreundlich</span>
+    <span class="m-item">Kein Abo-Zwang</span>
+    <span class="m-item">Responsive Design</span>
+    <span class="m-item">Domain Inklusive</span>
+    <span class="m-item">Schnelle Ladezeiten</span>
+    <span class="m-item">SEO-Grundoptimierung</span>
+    <span class="m-item">Kontaktformular</span>
+    <span class="m-item">Google Maps</span>
+    <span class="m-item">Mobilfreundlich</span>
+    <span class="m-item">Kein Abo-Zwang</span>
   </div>
 </div>
 
-<!-- LEISTUNGEN -->
+<!-- ===================== LEISTUNGEN ===================== -->
 <section class="section" id="leistungen">
-  <div class="sec-eyebrow" data-de>Was Sie bekommen</div>
-  <div class="sec-eyebrow" data-en>What you get</div>
-  <h2 class="sec-title reveal" data-de>Alles drin — <em>kein</em> technisches Vorwissen nötig</h2>
-  <h2 class="sec-title reveal" data-en>Everything included — <em>zero</em> technical knowledge needed</h2>
+  <div class="sec-eyebrow t-de f">Was Sie bekommen</div>
+  <div class="sec-eyebrow t-en f">What you get</div>
+  <h2 class="sec-title reveal t-de b">Alles drin — <em>kein</em> technisches Vorwissen nötig</h2>
+  <h2 class="sec-title reveal t-en b">Everything included — <em>zero</em> technical knowledge needed</h2>
+
   <div class="features-grid reveal">
     <div class="feat-card">
       <div class="feat-ico">📱</div>
-      <div class="feat-name" data-de>Mobilfreundliches Design</div>
-      <div class="feat-name" data-en>Mobile-First Design</div>
-      <p class="feat-desc" data-de>Über 70 % aller Websitebesuche kommen vom Smartphone. Ihre Seite sieht auf jedem Gerät tadellos aus.</p>
-      <p class="feat-desc" data-en>Over 70% of all website visits come from phones. Your site looks flawless on every device.</p>
+      <div class="feat-name t-de b">Mobilfreundliches Design</div>
+      <div class="feat-name t-en b">Mobile-First Design</div>
+      <p class="feat-desc t-de b">Über 70 % aller Websitebesuche kommen vom Smartphone. Ihre Seite sieht auf jedem Gerät tadellos aus.</p>
+      <p class="feat-desc t-en b">Over 70% of all website visits come from phones. Your site looks flawless on every device.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico">🌐</div>
-      <div class="feat-name" data-de>Eigene Domain (1. Jahr gratis)</div>
-      <div class="feat-name" data-en>Custom Domain (1st year free)</div>
-      <p class="feat-desc" data-de>Wir kümmern uns um die Registrierung Ihrer Wunschdomain — z. B. ihrname.de. Das erste Jahr ist im Paket enthalten.</p>
-      <p class="feat-desc" data-en>We handle registering your chosen domain — e.g. yourname.de. The first year is included in the package.</p>
+      <div class="feat-name t-de b">Eigene Domain (1. Jahr gratis)</div>
+      <div class="feat-name t-en b">Custom Domain (1st year free)</div>
+      <p class="feat-desc t-de b">Wir kümmern uns um die Registrierung Ihrer Wunschdomain — z. B. ihrname.de. Das erste Jahr ist im Paket enthalten.</p>
+      <p class="feat-desc t-en b">We handle registering your chosen domain — e.g. yourname.de. The first year is included in the package.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico">⚡</div>
-      <div class="feat-name" data-de>Blitzschnelle Ladezeiten</div>
-      <div class="feat-name" data-en>Lightning-Fast Load Times</div>
-      <p class="feat-desc" data-de>Langsame Websites verlieren bis zu 40 % der Besucher. Wir optimieren jede Seite für maximale Geschwindigkeit.</p>
-      <p class="feat-desc" data-en>Slow sites lose up to 40% of visitors. We optimise every page for maximum speed.</p>
+      <div class="feat-name t-de b">Blitzschnelle Ladezeiten</div>
+      <div class="feat-name t-en b">Lightning-Fast Load Times</div>
+      <p class="feat-desc t-de b">Langsame Websites verlieren bis zu 40 % der Besucher. Wir optimieren für maximale Geschwindigkeit.</p>
+      <p class="feat-desc t-en b">Slow sites lose up to 40% of visitors. We optimise every page for maximum speed.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico">🔍</div>
-      <div class="feat-name" data-de>SEO-Grundoptimierung</div>
-      <div class="feat-name" data-en>SEO Basics Setup</div>
-      <p class="feat-desc" data-de>Meta-Tags, Google-Indexierung, strukturierte Daten — damit Ihre Kunden Sie bei Google finden.</p>
-      <p class="feat-desc" data-en>Meta tags, Google indexing, structured data — so your customers can find you on Google.</p>
+      <div class="feat-name t-de b">SEO-Grundoptimierung</div>
+      <div class="feat-name t-en b">SEO Basics Setup</div>
+      <p class="feat-desc t-de b">Meta-Tags, Google-Indexierung, strukturierte Daten — damit Ihre Kunden Sie bei Google finden.</p>
+      <p class="feat-desc t-en b">Meta tags, Google indexing, structured data — so your customers can find you on Google.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico">📩</div>
-      <div class="feat-name" data-de>Kontaktformular & Karte</div>
-      <div class="feat-name" data-en>Contact Form & Map</div>
-      <p class="feat-desc" data-de>Nachrichten direkt in Ihr Postfach, Google Maps eingebettet und alle Kontaktdaten prominent platziert.</p>
-      <p class="feat-desc" data-en>Messages straight to your inbox, Google Maps embedded, and all contact details front and centre.</p>
+      <div class="feat-name t-de b">Kontaktformular & Karte</div>
+      <div class="feat-name t-en b">Contact Form & Map</div>
+      <p class="feat-desc t-de b">Nachrichten direkt in Ihr Postfach, Google Maps eingebettet und alle Kontaktdaten prominent platziert.</p>
+      <p class="feat-desc t-en b">Messages straight to your inbox, Google Maps embedded, and all contact details front and centre.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico">🎨</div>
-      <div class="feat-name" data-de>Individuelles Design</div>
-      <div class="feat-name" data-en>Custom Design</div>
-      <p class="feat-desc" data-de>Kein Template von der Stange. Jede Website wird speziell für Ihr Unternehmen und Ihre Zielgruppe entworfen.</p>
-      <p class="feat-desc" data-en>No off-the-shelf templates. Every site is designed specifically for your business and your customers.</p>
+      <div class="feat-name t-de b">Individuelles Design</div>
+      <div class="feat-name t-en b">Custom Design</div>
+      <p class="feat-desc t-de b">Kein Template von der Stange. Jede Website wird speziell für Ihr Unternehmen entworfen.</p>
+      <p class="feat-desc t-en b">No off-the-shelf templates. Every site is designed specifically for your business.</p>
     </div>
   </div>
 </section>
 
-<!-- PREISE -->
+<!-- ===================== PREISE ===================== -->
 <section class="section" id="preise" style="padding-top:0">
-  <div class="sec-eyebrow" data-de>Preise</div>
-  <div class="sec-eyebrow" data-en>Pricing</div>
-  <h2 class="sec-title reveal" data-de>Ein Paket. <em>Alles inklusive.</em> Keine Überraschungen.</h2>
-  <h2 class="sec-title reveal" data-en>One package. <em>Everything included.</em> No surprises.</h2>
+  <div class="sec-eyebrow t-de f">Preise</div>
+  <div class="sec-eyebrow t-en f">Pricing</div>
+  <h2 class="sec-title reveal t-de b">Ein Paket. <em>Alles inklusive.</em> Keine Überraschungen.</h2>
+  <h2 class="sec-title reveal t-en b">One package. <em>Everything included.</em> No surprises.</h2>
 
   <div class="pricing-wrap reveal">
     <div class="pricing-card">
-      <div class="pricing-star" data-de>Unser Angebot</div>
-      <div class="pricing-star" data-en>Our Offer</div>
+      <div class="pricing-star t-de b">Unser Angebot</div>
+      <div class="pricing-star t-en b">Our Offer</div>
 
       <div class="price-amount">590 €</div>
-      <p class="price-sublabel" data-de>Einmaliger Festpreis · Keine monatlichen Pflichtkosten</p>
-      <p class="price-sublabel" data-en>One-time flat fee · No mandatory monthly costs</p>
-      <p class="price-incl" data-de>1. Jahr Ihrer eigenen Domain bereits inklusive</p>
-      <p class="price-incl" data-en>First year of your custom domain already included</p>
+      <p class="price-sublabel t-de b">Einmaliger Festpreis · Keine monatlichen Pflichtkosten</p>
+      <p class="price-sublabel t-en b">One-time flat fee · No mandatory monthly costs</p>
+      <p class="price-incl t-de b">1. Jahr Ihrer eigenen Domain bereits inklusive</p>
+      <p class="price-incl t-en b">First year of your custom domain already included</p>
 
       <ul class="feat-list">
-        <li data-de>Bis zu 5 Seiten — professionell gestaltet & auf Sie zugeschnitten</li>
-        <li data-en>Up to 5 pages — professionally designed & tailored to you</li>
-        <li data-de>Vollständig mobilfreundlich (Smartphone, Tablet, Desktop)</li>
-        <li data-en>Fully responsive (smartphone, tablet, desktop)</li>
-        <li data-de>Eigene Domain inklusive (z. B. ihrname.de) — 1. Jahr gratis</li>
-        <li data-en>Custom domain included (e.g. yourname.de) — 1st year free</li>
-        <li data-de>Kontaktformular mit E-Mail-Benachrichtigung</li>
-        <li data-en>Contact form with email notification</li>
-        <li data-de>Google Maps eingebettet</li>
-        <li data-en>Google Maps embedded</li>
-        <li data-de>SEO-Grundoptimierung & Google-Indexierung</li>
-        <li data-en>SEO basics & Google indexing setup</li>
-        <li data-de>Schnelle Ladezeiten — für Google & Besucher optimiert</li>
-        <li data-en>Fast load times — optimised for Google & visitors</li>
-        <li data-de>2 Überarbeitungsrunden bis alles perfekt ist</li>
-        <li data-en>2 revision rounds until everything is perfect</li>
-        <li data-de>14 Tage Support nach dem Launch</li>
-        <li data-en>14 days of support after launch</li>
+        <li class="t-de li">Bis zu 5 Seiten — professionell gestaltet & auf Sie zugeschnitten</li>
+        <li class="t-en li">Up to 5 pages — professionally designed & tailored to you</li>
+        <li class="t-de li">Vollständig mobilfreundlich (Smartphone, Tablet, Desktop)</li>
+        <li class="t-en li">Fully responsive (smartphone, tablet, desktop)</li>
+        <li class="t-de li">Eigene Domain inklusive (z. B. ihrname.de) — 1. Jahr gratis</li>
+        <li class="t-en li">Custom domain included (e.g. yourname.de) — 1st year free</li>
+        <li class="t-de li">Kontaktformular mit E-Mail-Benachrichtigung</li>
+        <li class="t-en li">Contact form with email notification</li>
+        <li class="t-de li">Google Maps eingebettet</li>
+        <li class="t-en li">Google Maps embedded</li>
+        <li class="t-de li">SEO-Grundoptimierung & Google-Indexierung</li>
+        <li class="t-en li">SEO basics & Google indexing setup</li>
+        <li class="t-de li">Schnelle Ladezeiten — für Google & Besucher optimiert</li>
+        <li class="t-en li">Fast load times — optimised for Google & visitors</li>
+        <li class="t-de li">2 Überarbeitungsrunden bis alles perfekt ist</li>
+        <li class="t-en li">2 revision rounds until everything is perfect</li>
+        <li class="t-de li">14 Tage Support nach dem Launch</li>
+        <li class="t-en li">14 days of support after launch</li>
       </ul>
 
-      <div class="addons-title" data-de>Optionale Erweiterungen</div>
-      <div class="addons-title" data-en>Optional Add-ons</div>
+      <div class="addons-title t-de b">Optionale Erweiterungen</div>
+      <div class="addons-title t-en b">Optional Add-ons</div>
 
       <div class="addon-row">
         <div class="addon-info">
           <div class="addon-ico">🖥️</div>
           <div>
-            <div class="addon-name" data-de>Lifetime-Hosting <span class="addon-badge">Einmalig</span></div>
-            <div class="addon-name" data-en>Lifetime Hosting <span class="addon-badge">One-time</span></div>
-            <div class="addon-desc" data-de>Wir hosten Ihre Website dauerhaft — einmal zahlen, für immer online. Keine jährlichen Hosting-Gebühren mehr.</div>
-            <div class="addon-desc" data-en>We host your website permanently — pay once, stay online forever. No annual hosting fees.</div>
+            <div class="addon-name t-de b">Lifetime-Hosting <span class="addon-badge">Einmalig</span></div>
+            <div class="addon-name t-en b">Lifetime Hosting <span class="addon-badge">One-time</span></div>
+            <div class="addon-desc t-de b">Wir hosten Ihre Website dauerhaft — einmal zahlen, für immer online. Keine jährlichen Hosting-Gebühren mehr.</div>
+            <div class="addon-desc t-en b">We host your website permanently — pay once, stay online forever. No annual hosting fees.</div>
           </div>
         </div>
-        <div class="addon-price">100 €<span class="addon-freq" data-de>einmalig</span><span class="addon-freq" data-en>one-time</span></div>
+        <div class="addon-price">
+          100 €
+          <span class="addon-freq t-de b">einmalig</span>
+          <span class="addon-freq t-en b">one-time</span>
+        </div>
       </div>
 
       <div class="addon-row">
         <div class="addon-info">
           <div class="addon-ico">🛠️</div>
           <div>
-            <div class="addon-name" data-de>Support & Kleine Änderungen <span class="addon-badge">Optional</span></div>
-            <div class="addon-name" data-en>Support & Small Changes <span class="addon-badge">Optional</span></div>
-            <div class="addon-desc" data-de>Texte aktualisieren, Bilder tauschen, Öffnungszeiten anpassen — wir kümmern uns. Monatlich kündbar.</div>
-            <div class="addon-desc" data-en>Update text, swap images, adjust opening hours — we handle it. Cancel anytime.</div>
+            <div class="addon-name t-de b">Support & Kleine Änderungen <span class="addon-badge">Optional</span></div>
+            <div class="addon-name t-en b">Support & Small Changes <span class="addon-badge">Optional</span></div>
+            <div class="addon-desc t-de b">Texte aktualisieren, Bilder tauschen, Öffnungszeiten anpassen — wir kümmern uns. Monatlich kündbar.</div>
+            <div class="addon-desc t-en b">Update text, swap images, adjust opening hours — we handle it. Cancel anytime.</div>
           </div>
         </div>
-        <div class="addon-price">74,99 €<span class="addon-freq" data-de>/ Monat</span><span class="addon-freq" data-en>/ month</span></div>
+        <div class="addon-price">
+          74,99 €
+          <span class="addon-freq t-de b">/ Monat</span>
+          <span class="addon-freq t-en b">/ month</span>
+        </div>
       </div>
 
       <div style="margin-top:2rem">
-        <a href="#termin" class="btn-gold" data-de style="width:100%;text-align:center;display:block">Jetzt kostenloses Gespräch buchen</a>
-        <a href="#termin" class="btn-gold" data-en style="width:100%;text-align:center;display:block">Book your free call now</a>
+        <a href="#termin" class="btn-gold t-de b" style="text-align:center">Jetzt kostenloses Gespräch buchen</a>
+        <a href="#termin" class="btn-gold t-en b" style="text-align:center">Book your free call now</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ABLAUF -->
+<!-- ===================== ABLAUF ===================== -->
 <section class="process-section" id="ablauf">
-  <div class="sec-eyebrow" data-de>Wie es läuft</div>
-  <div class="sec-eyebrow" data-en>How it works</div>
-  <h2 class="sec-title reveal" data-de>In <em>4 Schritten</em> zur fertigen Website</h2>
-  <h2 class="sec-title reveal" data-en>From first call to <em>live website</em> in 4 steps</h2>
+  <div class="sec-eyebrow t-de f">Wie es läuft</div>
+  <div class="sec-eyebrow t-en f">How it works</div>
+  <h2 class="sec-title reveal t-de b">In <em>4 Schritten</em> zur fertigen Website</h2>
+  <h2 class="sec-title reveal t-en b">From first call to <em>live website</em> in 4 steps</h2>
+
   <div class="process-steps">
     <div class="p-step reveal">
       <div class="p-num">01</div>
-      <div class="p-name" data-de>Kostenloses Gespräch</div>
-      <div class="p-name" data-en>Free Call</div>
-      <p class="p-desc" data-de>Wir sprechen über Ihr Unternehmen, klären alle Fragen zu Preis, Funktionen und Ablauf. Keine technischen Kenntnisse nötig.</p>
-      <p class="p-desc" data-en>We talk through your business, answer every question about price, features, and process. No tech knowledge needed.</p>
+      <div class="p-name t-de b">Kostenloses Gespräch</div>
+      <div class="p-name t-en b">Free Call</div>
+      <p class="p-desc t-de b">Wir sprechen über Ihr Unternehmen und klären alle Fragen zu Preis, Funktionen und Ablauf.</p>
+      <p class="p-desc t-en b">We talk through your business and answer every question about price, features, and process.</p>
     </div>
     <div class="p-step reveal">
       <div class="p-num">02</div>
-      <div class="p-name" data-de>Design & Freigabe</div>
-      <div class="p-name" data-en>Design & Approval</div>
-      <p class="p-desc" data-de>Sie erhalten einen ersten Entwurf. Feedback geben, anpassen lassen — bis es Ihnen 100 % gefällt.</p>
-      <p class="p-desc" data-en>You receive a first draft. Give feedback, request changes — until you're 100% happy.</p>
+      <div class="p-name t-de b">Design & Freigabe</div>
+      <div class="p-name t-en b">Design & Approval</div>
+      <p class="p-desc t-de b">Sie erhalten einen ersten Entwurf. Feedback geben, anpassen — bis es 100 % stimmt.</p>
+      <p class="p-desc t-en b">You receive a first draft. Give feedback, request changes — until you're 100% happy.</p>
     </div>
     <div class="p-step reveal">
       <div class="p-num">03</div>
-      <div class="p-name" data-de>Umsetzung & Test</div>
-      <div class="p-name" data-en>Build & Test</div>
-      <p class="p-desc" data-de>Wir bauen Ihre Website, testen sie auf allen Geräten und richten Domain sowie Hosting ein.</p>
-      <p class="p-desc" data-en>We build your site, test it on all devices, and set up your domain & hosting.</p>
+      <div class="p-name t-de b">Umsetzung & Test</div>
+      <div class="p-name t-en b">Build & Test</div>
+      <p class="p-desc t-de b">Wir bauen Ihre Website, testen sie auf allen Geräten und richten Domain & Hosting ein.</p>
+      <p class="p-desc t-en b">We build your site, test it on all devices, and set up your domain & hosting.</p>
     </div>
     <div class="p-step reveal">
       <div class="p-num">04</div>
-      <div class="p-name" data-de>Launch & Übergabe</div>
-      <div class="p-name" data-en>Launch & Handover</div>
-      <p class="p-desc" data-de>Ihre Website geht live. Wir bleiben 14 Tage für Fragen und kleine Anpassungen erreichbar.</p>
-      <p class="p-desc" data-en>Your website goes live. We stay available for 14 days for questions and small tweaks.</p>
+      <div class="p-name t-de b">Launch & Übergabe</div>
+      <div class="p-name t-en b">Launch & Handover</div>
+      <p class="p-desc t-de b">Ihre Website geht live. Wir bleiben 14 Tage für Fragen und Anpassungen erreichbar.</p>
+      <p class="p-desc t-en b">Your website goes live. We stay available for 14 days for questions and tweaks.</p>
     </div>
   </div>
 </section>
 
-<!-- TERMIN / BOOKING -->
+<!-- ===================== TERMIN ===================== -->
 <section class="booking-section" id="termin">
   <div class="booking-inner">
     <div class="booking-info">
-      <div class="sec-eyebrow" data-de>Gespräch buchen</div>
-      <div class="sec-eyebrow" data-en>Book a Call</div>
-      <h2 data-de>Lassen Sie uns <em>reden</em> — kostenlos & unverbindlich</h2>
-      <h2 data-en>Let's <em>talk</em> — free & no commitment</h2>
-      <p data-de>Egal ob Sie über eine E-Mail, einen Demo-Link oder einen Kaltanruf auf uns gestoßen sind — der Gesprächstermin ist unkompliziert und geht maximal 30 Minuten.</p>
-      <p data-en>Whether you found us via email, a demo link, or a cold call — the call is straightforward and takes at most 30 minutes.</p>
+      <div class="sec-eyebrow t-de f">Gespräch buchen</div>
+      <div class="sec-eyebrow t-en f">Book a Call</div>
+      <h2 class="t-de b">Lassen Sie uns <em>reden</em> — kostenlos & unverbindlich</h2>
+      <h2 class="t-en b">Let's <em>talk</em> — free & no commitment</h2>
+      <p class="t-de b">Egal ob Sie über eine E-Mail, einen Demo-Link oder einen Kaltanruf auf uns gestoßen sind — das Gespräch dauert maximal 30 Minuten.</p>
+      <p class="t-en b">Whether you found us via email, a demo link, or a cold call — the call takes at most 30 minutes.</p>
 
       <div class="call-types">
         <div class="call-type">
           <div class="ct-ico">📧</div>
           <div>
-            <div class="ct-name" data-de>Nach E-Mail / Demo</div>
-            <div class="ct-name" data-en>After Email / Demo</div>
-            <div class="ct-desc" data-de>Sie haben das Demo gesehen — super! Wir klären Zahlung, Domain, Funktionen und die nächsten Schritte.</div>
-            <div class="ct-desc" data-en>You've seen the demo — great! We'll cover payment, domain, features and next steps.</div>
+            <div class="ct-name t-de b">Nach E-Mail / Demo</div>
+            <div class="ct-name t-en b">After Email / Demo</div>
+            <div class="ct-desc t-de b">Sie haben das Demo gesehen — super! Wir klären Zahlung, Domain, Funktionen und nächste Schritte.</div>
+            <div class="ct-desc t-en b">You've seen the demo — great! We'll cover payment, domain, features and next steps.</div>
           </div>
         </div>
         <div class="call-type">
           <div class="ct-ico">📞</div>
           <div>
-            <div class="ct-name" data-de>Nach einem Kaltanruf</div>
-            <div class="ct-name" data-en>After a Cold Call</div>
-            <div class="ct-desc" data-de>Noch kein Demo gesehen? Wir zeigen Ihnen im Gespräch, wie Ihre zukünftige Website aussehen könnte.</div>
-            <div class="ct-desc" data-en>Haven't seen a demo yet? We'll show you what your site could look like on the call.</div>
+            <div class="ct-name t-de b">Nach einem Kaltanruf</div>
+            <div class="ct-name t-en b">After a Cold Call</div>
+            <div class="ct-desc t-de b">Noch kein Demo? Wir zeigen Ihnen im Gespräch, wie Ihre zukünftige Website aussehen könnte.</div>
+            <div class="ct-desc t-en b">Haven't seen a demo yet? We'll show you what your site could look like on the call.</div>
           </div>
         </div>
         <div class="call-type">
           <div class="ct-ico">💬</div>
           <div>
-            <div class="ct-name" data-de>Allgemeine Fragen</div>
-            <div class="ct-name" data-en>General Questions</div>
-            <div class="ct-desc" data-de>Preis, Ablauf, Technik — kein Anliegen ist zu klein. Wir nehmen uns Zeit für Sie.</div>
-            <div class="ct-desc" data-en>Pricing, process, technical details — no question is too small. We take the time.</div>
+            <div class="ct-name t-de b">Allgemeine Fragen</div>
+            <div class="ct-name t-en b">General Questions</div>
+            <div class="ct-desc t-de b">Preis, Ablauf, Technik — kein Anliegen ist zu klein. Wir nehmen uns Zeit.</div>
+            <div class="ct-desc t-en b">Pricing, process, tech — no question is too small. We take the time.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- CALENDAR EMBED -->
     <div class="cal-card">
       <div class="cal-header">
-        <span class="cal-hd-title" data-de>📅 Termin auswählen</span>
-        <span class="cal-hd-title" data-en>📅 Pick a Time Slot</span>
+        <span class="cal-hd-title t-de i">📅 Termin auswählen</span>
+        <span class="cal-hd-title t-en i">📅 Pick a Time Slot</span>
         <span class="cal-hd-badge">Google Calendar</span>
       </div>
-      <!-- ↓↓ REPLACE THE DIV BELOW WITH YOUR GOOGLE CALENDAR IFRAME ↓↓ -->
-      <div class="cal-body">
-        <div class="cal-ico-box">📆</div>
-        <h4 data-de>Google Calendar hier einbetten</h4>
-        <h4 data-en>Embed Your Google Calendar Here</h4>
-        <p data-de>Ersetze diesen Bereich mit deinem Google Terminplan-Einbettungscode.</p>
-        <p data-en>Replace this area with your Google appointment scheduling embed code.</p>
-        <div class="cal-code">
-&lt;iframe<br>
-&nbsp;src="https://calendar.google.com/calendar/<br>
-&nbsp;appointments/schedules/DEINE_ID"<br>
-&nbsp;width="100%" height="540"<br>
-&nbsp;frameborder="0" style="border:0"&gt;<br>
-&lt;/iframe&gt;
-        </div>
-        <p class="cal-hint" data-de><strong>So geht's:</strong> Google Calendar → Terminplan erstellen → Veröffentlichen → Einbetten → Code hier einfügen.</p>
-        <p class="cal-hint" data-en><strong>How to:</strong> Google Calendar → Create Appointment Schedule → Publish → Embed → paste code here.</p>
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <div class="cal-iframe-wrap">
+        <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3ifInWNYQe6f47fWuJeHfbPQhlthaC-NakpcAVuuaezFijUrlAatq4xyewkP4fYm7SYhEwz4qA?gv=true" width="100%" height="600" frameborder="0"></iframe>
       </div>
-      <!-- ↑↑ END CALENDAR PLACEHOLDER ↑↑ -->
+      <!-- end Google Calendar Appointment Scheduling -->
     </div>
   </div>
 </section>
 
-<!-- FAQ -->
+<!-- ===================== FAQ ===================== -->
 <section class="faq-section" id="faq">
-  <div class="sec-eyebrow" data-de>Häufige Fragen</div>
-  <div class="sec-eyebrow" data-en>FAQ</div>
-  <h2 class="sec-title reveal" data-de>Alles beantwortet — <em>klar & ehrlich</em></h2>
-  <h2 class="sec-title reveal" data-en>Everything answered — <em>clear & honest</em></h2>
+  <div class="sec-eyebrow t-de f">Häufige Fragen</div>
+  <div class="sec-eyebrow t-en f">FAQ</div>
+  <h2 class="sec-title reveal t-de b">Alles beantwortet — <em>klar & ehrlich</em></h2>
+  <h2 class="sec-title reveal t-en b">Everything answered — <em>clear & honest</em></h2>
+
   <div class="faq-grid reveal">
     <div class="faq-item">
-      <div class="faq-q" data-de>Was passiert nach dem ersten Jahr mit der Domain?</div>
-      <div class="faq-q" data-en>What happens to the domain after the first year?</div>
-      <p class="faq-a" data-de>Das erste Jahr ist im Paketpreis enthalten. Danach fallen die üblichen Domaingebühren an (ca. 10–20 €/Jahr) — wir erinnern Sie rechtzeitig.</p>
-      <p class="faq-a" data-en>The first year is included in the package. After that, standard domain renewal fees apply (approx. €10–20/year) — we'll remind you in advance.</p>
+      <div class="faq-q t-de b">Was passiert nach dem ersten Jahr mit der Domain?</div>
+      <div class="faq-q t-en b">What happens to the domain after the first year?</div>
+      <p class="faq-a t-de b">Das erste Jahr ist im Paketpreis enthalten. Danach fallen die üblichen Domaingebühren an (ca. 10–20 €/Jahr) — wir erinnern Sie rechtzeitig.</p>
+      <p class="faq-a t-en b">The first year is included in the package. After that, standard domain fees apply (approx. €10–20/year) — we'll remind you in advance.</p>
     </div>
     <div class="faq-item">
-      <div class="faq-q" data-de>Was beinhaltet das Lifetime-Hosting?</div>
-      <div class="faq-q" data-en>What does lifetime hosting include?</div>
-      <p class="faq-a" data-de>Einmalig 100 € — und Ihre Website liegt dauerhaft auf unseren Servern ohne weitere Hostingkosten. SSL-Zertifikat inklusive.</p>
-      <p class="faq-a" data-en>A one-time €100 — your website lives on our servers permanently with no further hosting costs. SSL certificate included.</p>
+      <div class="faq-q t-de b">Was beinhaltet das Lifetime-Hosting?</div>
+      <div class="faq-q t-en b">What does lifetime hosting include?</div>
+      <p class="faq-a t-de b">Einmalig 100 € — Ihre Website liegt dauerhaft auf unseren Servern, ohne weitere Hostingkosten. SSL-Zertifikat inklusive.</p>
+      <p class="faq-a t-en b">A one-time €100 — your website lives on our servers permanently with no further hosting costs. SSL certificate included.</p>
     </div>
     <div class="faq-item">
-      <div class="faq-q" data-de>Was deckt der monatliche Support-Plan ab?</div>
-      <div class="faq-q" data-en>What does the monthly support plan cover?</div>
-      <p class="faq-a" data-de>Texte anpassen, Bilder tauschen, neue Öffnungszeiten, kleine Inhaltsänderungen — alles ohne großen Aufwand. Monatlich kündbar, kein Jahresvertrag.</p>
-      <p class="faq-a" data-en>Updating text, swapping images, new opening hours, small content changes — all hassle-free. Cancel monthly, no annual contract.</p>
+      <div class="faq-q t-de b">Was deckt der monatliche Support-Plan ab?</div>
+      <div class="faq-q t-en b">What does the monthly support plan cover?</div>
+      <p class="faq-a t-de b">Texte anpassen, Bilder tauschen, neue Öffnungszeiten, kleine Inhaltsänderungen. Monatlich kündbar, kein Jahresvertrag.</p>
+      <p class="faq-a t-en b">Updating text, swapping images, new opening hours, small content changes. Cancel monthly, no annual contract.</p>
     </div>
     <div class="faq-item">
-      <div class="faq-q" data-de>Ich kenne mich mit Technik nicht aus — ist das ein Problem?</div>
-      <div class="faq-q" data-en>I have no technical knowledge — is that a problem?</div>
-      <p class="faq-a" data-de>Überhaupt nicht. Wir kümmern uns um alles. Sie müssen nichts installieren oder konfigurieren — nur Ihre Wünsche mitteilen.</p>
-      <p class="faq-a" data-en>Not at all. We handle everything. You don't need to install or configure anything — just tell us what you want.</p>
+      <div class="faq-q t-de b">Ich kenne mich mit Technik nicht aus — Problem?</div>
+      <div class="faq-q t-en b">I have no technical knowledge — is that a problem?</div>
+      <p class="faq-a t-de b">Überhaupt nicht. Wir kümmern uns um alles. Sie müssen nichts installieren oder konfigurieren.</p>
+      <p class="faq-a t-en b">Not at all. We handle everything. You don't need to install or configure anything.</p>
     </div>
     <div class="faq-item">
-      <div class="faq-q" data-de>Wann und wie wird bezahlt?</div>
-      <div class="faq-q" data-en>When and how do I pay?</div>
-      <p class="faq-a" data-de>50 % bei Projektbeginn, 50 % nach Ihrer finalen Freigabe — bevor die Website live geht. Überweisung oder PayPal möglich.</p>
-      <p class="faq-a" data-en>50% at project start, 50% after your final approval — before the site goes live. Bank transfer or PayPal accepted.</p>
+      <div class="faq-q t-de b">Wann und wie wird bezahlt?</div>
+      <div class="faq-q t-en b">When and how do I pay?</div>
+      <p class="faq-a t-de b">50 % bei Projektbeginn, 50 % nach Ihrer finalen Freigabe — vor dem Launch. Überweisung oder PayPal möglich.</p>
+      <p class="faq-a t-en b">50% at project start, 50% after your final approval — before launch. Bank transfer or PayPal accepted.</p>
     </div>
     <div class="faq-item">
-      <div class="faq-q" data-de>Wie lange dauert die Umsetzung?</div>
-      <div class="faq-q" data-en>How long does it take?</div>
-      <p class="faq-a" data-de>In der Regel 5–10 Werktage vom ersten Gespräch bis zum Launch — je nachdem, wie schnell Feedback kommt.</p>
-      <p class="faq-a" data-en>Typically 5–10 business days from first call to launch — depending on how quickly feedback comes in.</p>
+      <div class="faq-q t-de b">Wie lange dauert die Umsetzung?</div>
+      <div class="faq-q t-en b">How long does it take?</div>
+      <p class="faq-a t-de b">In der Regel 5–10 Werktage vom ersten Gespräch bis zum Launch — je nach Geschwindigkeit des Feedbacks.</p>
+      <p class="faq-a t-en b">Typically 5–10 business days from first call to launch — depending on feedback turnaround.</p>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ===================== CTA ===================== -->
 <section class="cta-section">
-  <h2 data-de>Bereit, <em>online</em> zu gehen?</h2>
-  <h2 data-en>Ready to go <em>online</em>?</h2>
-  <p data-de>Buchen Sie jetzt ein kostenloses Gespräch — unverbindlich, auf Deutsch oder Englisch.</p>
-  <p data-en>Book a free call now — no commitment, in German or English.</p>
+  <h2 class="t-de b">Bereit, <em>online</em> zu gehen?</h2>
+  <h2 class="t-en b">Ready to go <em>online</em>?</h2>
+  <p class="t-de b">Buchen Sie jetzt ein kostenloses Gespräch — unverbindlich, auf Deutsch oder Englisch.</p>
+  <p class="t-en b">Book a free call now — no commitment, in German or English.</p>
   <div class="cta-actions">
-    <a href="#termin" class="btn-gold" data-de>Kostenloses Gespräch buchen</a>
-    <a href="#termin" class="btn-gold" data-en>Book a free call</a>
-    <a href="mailto:hallo@mohawebstarz.de" class="btn-line" data-de>
+    <a href="#termin" class="btn-gold t-de">Kostenloses Gespräch buchen</a>
+    <a href="#termin" class="btn-gold t-en">Book a free call</a>
+    <a href="mailto:hallo@mohawebstarz.de" class="btn-line t-de">
       Oder E-Mail schreiben
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <a href="mailto:hello@mohawebstarz.com" class="btn-line" data-en>
+    <a href="mailto:hello@mohawebstarz.com" class="btn-line t-en">
       Or send an email
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ===================== FOOTER ===================== -->
 <footer>
   <a href="#" class="footer-logo">Moha <span>Webstarz</span></a>
   <ul class="footer-links">
-    <li><a href="#leistungen" data-de>Leistungen</a><a href="#leistungen" data-en>Services</a></li>
-    <li><a href="#preise" data-de>Preise</a><a href="#preise" data-en>Pricing</a></li>
-    <li><a href="#termin" data-de>Termin buchen</a><a href="#termin" data-en>Book a call</a></li>
+    <li><a href="#leistungen" class="t-de i">Leistungen</a><a href="#leistungen" class="t-en i">Services</a></li>
+    <li><a href="#preise" class="t-de i">Preise</a><a href="#preise" class="t-en i">Pricing</a></li>
+    <li><a href="#termin" class="t-de i">Termin buchen</a><a href="#termin" class="t-en i">Book a call</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
-  <p class="footer-copy" data-de>© 2025 Moha Webstarz. Alle Rechte vorbehalten.</p>
-  <p class="footer-copy" data-en>© 2025 Moha Webstarz. All rights reserved.</p>
+  <p class="footer-copy t-de b">© 2025 Moha Webstarz. Alle Rechte vorbehalten.</p>
+  <p class="footer-copy t-en b">© 2025 Moha Webstarz. All rights reserved.</p>
 </footer>
 
 <script>
-function setLang(lang) {
-  document.documentElement.lang = lang;
-  document.getElementById('btn-de').classList.toggle('active', lang === 'de');
-  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-}
-setLang('de');
+  function setLang(lang) {
+    document.documentElement.className = 'lang-' + lang;
+    document.documentElement.lang = lang;
+    document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+  // Boot in German
+  setLang('de');
 
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      e.target.style.transitionDelay = (i * 0.06) + 's';
-      e.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  // Scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (i * 0.06) + 's';
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', ev => {
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) { ev.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', ev => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { ev.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
   });
-});
 </script>
 </body>
 </html>
